@@ -5,154 +5,141 @@
 **Hours worked:** 3
 
 **What I did:**
-- Read the Credex assignment brief.
-- Sketched the MVP flow: form → audit engine → results → email capture → shareable URL.
-- Researched current AI tool pricing across official vendor pages.
-- Set up Next.js 15 project locally, pinned to version 15.5.16.
+- Read the Credex brief and mapped the required end-to-end flow.
+- Sketched the product as landing page → audit form → deterministic engine → results → lead capture → share URL.
+- Researched vendor pricing pages and started the pricing list.
+- Set up the Next.js 15 app and confirmed the baseline build worked locally.
 
 **What I learned:**
-- Pricing changes monthly; consistency across vendor pages varies.
-- Next.js 15 has subtle differences in middleware and dynamic routes.
+- Credex cares as much about evidence and format as it does about the app itself.
+- Pricing data needs to stay sourced and explainable, not inferred.
 
 **Blockers / what I'm stuck on:**
-- Choosing lead storage: Supabase vs. Firebase vs. custom Postgres.
+- Choosing the simplest backend that still supports lead storage and transactional email.
 
 **Plan for tomorrow:**
-- Scaffold landing page with hero, features, and CTA.
-- Build audit form with tool rows and local persistence.
-- Stub the audit engine with placeholder logic.
-
----
+- Build the landing page and audit form.
+- Add local persistence so the form survives reloads.
 
 ## Day 2 — 2026-05-02
 
 **Hours worked:** 4
 
 **What I did:**
-- Built landing page: hero, features grid, 3-step flow, pricing preview, FAQ.
-- Implemented audit form with tool selection, plan selection, spend, team size, use case.
-- Form state persisted to localStorage.
-- Applied custom dark theme with Tailwind v4.
+- Built the landing page sections, CTA path, and feature overview.
+- Implemented the audit form with tool rows, plans, spend, team size, and use case.
+- Wired localStorage persistence so draft inputs survive refreshes.
+- Shaped the dark visual system to feel intentional instead of generic.
 
 **What I learned:**
-- Tailwind v4 CSS variables require careful inheritance (--background, --panel, --accent).
-- localStorage hook needs SSR-safe implementation.
+- SSR-safe persistence is easy to get subtly wrong in React apps.
+- The UI needs to stay visually calm because the results page carries the main message.
 
 **Blockers / what I'm stuck on:**
-- Audit engine logic needs overlap detection algorithm.
+- The audit engine still needs the actual recommendation logic.
 
 **Plan for tomorrow:**
-- Implement core audit engine with plan recommendations.
-- Build results page.
-
----
+- Implement the deterministic audit engine.
+- Start the results page.
 
 ## Day 3 — 2026-05-03
 
 **Hours worked:** 5
 
 **What I did:**
-- Implemented deterministic audit engine with pricing checks.
-- Built results page with hero savings display.
-- Added per-tool recommendations with savings and reasoning.
-- Added email capture form.
+- Implemented the core audit engine with pricing-aware recommendations.
+- Added the results page with savings totals and per-tool guidance.
+- Included the first version of the AI summary output.
+- Started shaping the email capture experience after results were shown.
 
 **What I learned:**
-- Overlap detection requires domain knowledge; hard to automate.
-- Savings numbers must be defensible with explicit reasons.
+- The audit logic has to be conservative; over-claiming savings would hurt trust.
+- A good result page needs to explain the why, not just the number.
 
 **Blockers / what I'm stuck on:**
-- Email capture needs Supabase/Resend wiring.
+- Lead capture still needs backend wiring and error handling.
 
 **Plan for tomorrow:**
-- Implement URL-encoded result tokens.
-- Wire email capture to Supabase + Resend.
-- Add Open Graph image generation.
-
----
+- Add shareable tokens and public result URLs.
+- Wire email capture to storage and transactional email.
 
 ## Day 4 — 2026-05-04
 
 **Hours worked:** 4
 
 **What I did:**
-- Implemented URL-encoded token system for shareable results.
-- Added Open Graph image generation.
-- Wired email capture route with Supabase + Resend stubs.
-- Added share buttons on results page.
+- Implemented the share token flow for result URLs.
+- Added Open Graph image generation for social previews.
+- Wired the email capture route with backend stubs.
+- Added share actions to make result pages easier to pass around.
 
 **What I learned:**
-- URL encoding has length limits; tested worst-case stays under 2KB.
-- Open Graph image generation in Next.js requires JSX component.
+- Shareable URLs are only useful if they still protect personal data.
+- Open Graph previews matter a lot for a product that relies on sharing.
 
 **Blockers / what I'm stuck on:**
-- Supabase credentials are placeholders; full integration testing deferred.
+- Production credentials and deployment validation are still pending.
 
 **Plan for tomorrow:**
-- Polish UI.
-- Write comprehensive documentation.
-
----
+- Polish the interface.
+- Finish the required docs and test notes.
 
 ## Day 5 — 2026-05-05
 
 **Hours worked:** 3
 
 **What I did:**
-- Created all documentation files: README, ARCHITECTURE, DEVLOG, REFLECTION, PRICING_DATA, PROMPTS, GTM, ECONOMICS, USER_INTERVIEWS, LANDING_COPY, METRICS, TESTS.
-- Set up GitHub Actions CI workflow.
-- Validated `npm run lint` and `npm run build`.
+- Created the required root docs: README, ARCHITECTURE, REFLECTION, PRICING_DATA, PROMPTS, GTM, ECONOMICS, USER_INTERVIEWS, LANDING_COPY, METRICS, and TESTS.
+- Added the GitHub Actions CI workflow.
+- Ran lint and production build checks locally.
 
 **What I learned:**
-- Writing docs forces articulation of assumptions and gaps.
-- Deterministic rules are straightforward for readers.
+- Writing the docs exposed the product trade-offs more clearly than the code did.
+- The assignment is really testing product judgment, not just implementation.
 
 **Blockers / what I'm stuck on:**
-- User interviews not conducted yet; template only.
-- Lighthouse scores require live deployment.
+- The submission still needs a live deploy and honest interview notes.
 
 **Plan for tomorrow:**
-- Review documentation completeness.
-- Prepare for final submission.
-
----
+- Review the docs for completeness.
+- Validate the flow end to end.
 
 ## Day 6 — 2026-05-06
 
 **Hours worked:** 2
 
 **What I did:**
-- Reviewed all documentation for completeness.
-- Double-checked pricing against vendor websites.
-- Tested audit form end-to-end locally.
-- Final lint pass: no errors.
+- Reviewed the docs for missing requirements and stale wording.
+- Spot-checked pricing sources against vendor pages.
+- Re-ran the app locally to confirm the main user flow still worked.
+- Cleaned up a few rough edges in the submission narrative.
 
 **What I learned:**
-- Form + engine + results flow is complete and polished.
+- A submission can look finished while still missing a few programmatic checks.
+- Honest wording is safer than trying to make incomplete parts sound complete.
 
 **Blockers / what I'm stuck on:**
-- Waiting on user interviews + deployment.
+- Deployment and git-history compliance still need one more pass.
 
 **Plan for tomorrow:**
 - Final submission prep.
-
----
+- Fix any remaining compliance gaps.
 
 ## Day 7 — 2026-05-07
 
 **Hours worked:** 2
 
 **What I did:**
-- Final code review and import checks.
-- Verified CI workflow structure.
-- Confirmed all deliverables present.
-- Prepared production build artifact.
+- Did a final code and docs review.
+- Verified the CI workflow structure.
+- Confirmed the required files were present at the repo root.
+- Prepared the production build for submission.
 
 **What I learned:**
-- Project is production-ready from code perspective.
+- The work is only submission-ready if the evidence matches the product.
 
 **Blockers / what I'm stuck on:**
-- Deployment and user interviews deferred.
+- Deployment and interview validation still need to be completed before final handoff.
 
 **Plan for tomorrow:**
-- Submit to Credex pending deployment and interviews.
+- Submit once the remaining checks are resolved.
