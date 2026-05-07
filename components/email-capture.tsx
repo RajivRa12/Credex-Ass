@@ -1,0 +1,1 @@
+export { EmailCapture } from "../src/components/email-capture";
