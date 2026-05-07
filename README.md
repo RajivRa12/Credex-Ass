@@ -107,7 +107,7 @@ vercel deploy
 ```bash
 npm run lint      # ESLint (flat config)
 npm run build     # Production build
-npm run test      # Run test suite (Jest/Vitest)
+npm run test      # Run Node + TypeScript test suite
 ```
 
 See [TESTS.md](./TESTS.md) for test coverage details.

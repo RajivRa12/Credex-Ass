@@ -94,31 +94,14 @@ test('detects overlapping tools and recommends consolidation', () => {
 
 ## Test runner setup
 
-### Current state (MVP)
-The project uses **ESLint** for linting and **npm run build** for compilation validation.  
-Formal test runner (Jest/Vitest) is optional for MVP but will be added before production.
+### Current state
+The project runs tests using **Node's built-in test runner** with `tsx` for TypeScript execution.
 
-### To set up Jest:
 ```bash
-npm install --save-dev jest @types/jest ts-jest
-
-# Create jest.config.js
-npx jest --init
-
-# Run tests
 npm run test
 ```
 
-### To set up Vitest:
-```bash
-npm install --save-dev vitest @vitest/ui
-
-# Update package.json scripts
-"test": "vitest"
-
-# Run tests with UI
-npm run test -- --ui
-```
+This executes all files in `tests/*.test.ts`.
 
 ---
 
@@ -128,10 +111,10 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to main:
 ```yaml
 - run: npm run lint
 - run: npm run build
-- run: npm run test  # ← Add this once test runner is set up
+- run: npm run test
 ```
 
-When tests are integrated, green checkmarks will appear on commits.
+Tests are now part of the expected CI path.
 
 ---
 
@@ -150,7 +133,6 @@ When tests are integrated, green checkmarks will appear on commits.
 ## Running all tests locally
 
 ```bash
-# Once test runner is configured:
 npm run test
 
 # With coverage report:
@@ -212,8 +194,6 @@ Use `npm run build` to validate TypeScript compilation before running tests.
 
 ## Next steps
 
-- [ ] Set up Jest or Vitest runner
-- [ ] Ensure all 5 test files pass
-- [ ] Add GitHub Actions workflow to run tests on every push
+- [x] Ensure all 5 test files pass
 - [ ] Add coverage reporting badge to README
 - [ ] Add integration tests for Supabase + Resend (currently stubbed)

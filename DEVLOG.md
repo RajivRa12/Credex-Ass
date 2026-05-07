@@ -1,9 +1,5 @@
 # Dev Log
 
-## 2026-05-07
-
-# Dev Log
-
 ## Day 1 — 2026-05-01
 
 **Hours worked:** 3

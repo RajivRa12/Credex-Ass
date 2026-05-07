@@ -19,6 +19,7 @@ All pricing verified from official vendor sources as of 2026-05-07.
 
 - **Free:** $0 (limited rate) — https://www.anthropic.com/pricing — verified 2026-05-07
 - **Claude Pro:** $20/month (subscription) — https://www.anthropic.com/pricing — verified 2026-05-07
+- **Claude Max:** $100/month or $200/month (higher usage plans) — https://www.anthropic.com/pricing — verified 2026-05-07
 - **Claude Team:** $30/month/seat (team features, shared conversation history) — https://www.anthropic.com/pricing — verified 2026-05-07
 - **Claude Enterprise:** Custom (on-premises, SLA, dedicated support) — https://www.anthropic.com/pricing — verified 2026-05-07
 - **API (usage-based):** $0.003/1k input tokens, $0.015/1k output tokens — https://www.anthropic.com/pricing — verified 2026-05-07
@@ -45,7 +46,8 @@ All pricing verified from official vendor sources as of 2026-05-07.
 ## Google Gemini
 
 - **Free:** Tier with rate limits — https://ai.google.dev/pricing — verified 2026-05-07
-- **Gemini Pro (free API):** Limited usage — https://ai.google.dev/pricing — verified 2026-05-07
+- **Gemini Pro:** Available in consumer and API tiers — https://ai.google.dev/pricing — verified 2026-05-07
+- **Gemini Ultra:** Available via Google AI plans (consumer tiering) — https://one.google.com/about/google-ai-plans — verified 2026-05-07
 - **Gemini Advanced (subscription in Google One):** $20/month (via Google One Premium) — https://one.google.com/about/google-ai-plans — verified 2026-05-07
 - **Gemini API (usage-based):** $0.075/1M input tokens, $0.3/1M output tokens (Pro tier) — https://ai.google.dev/pricing — verified 2026-05-07
 
