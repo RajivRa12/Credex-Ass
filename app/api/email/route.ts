@@ -35,35 +35,72 @@ async function storeInSupabase(payload: LeadRequestBody, shareUrl: string) {
     };
   }
 
-  const response = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/audit_leads`, {
+  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/audit_leads`;
+  const headers = {
+    apikey: supabaseServiceRoleKey,
+    Authorization: `Bearer ${supabaseServiceRoleKey}`,
+    "Content-Type": "application/json",
+    Prefer: "return=minimal",
+  };
+
+  const fullInsertPayload = {
+    email: payload.email,
+    share_url: shareUrl,
+    audit_token: payload.auditToken ?? null,
+    company_name: payload.result?.companyName ?? null,
+    verdict: payload.result?.verdict ?? null,
+    health_score: payload.result?.healthScore ?? null,
+    monthly_savings: payload.result?.monthlySavings ?? null,
+    annual_savings: payload.result?.annualSavings ?? null,
+    summary: payload.result?.summary ?? null,
+    use_case: payload.result?.useCase ?? null,
+    team_size: payload.result?.teamSize ?? null,
+    current_monthly_spend: payload.result?.currentMonthlySpend ?? null,
+    recommended_monthly_spend: payload.result?.recommendedMonthlySpend ?? null,
+    created_at: new Date().toISOString(),
+  };
+
+  const response = await fetch(endpoint, {
     method: "POST",
-    headers: {
-      apikey: supabaseServiceRoleKey,
-      Authorization: `Bearer ${supabaseServiceRoleKey}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify({
+    headers,
+    body: JSON.stringify(fullInsertPayload),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    const hasUnknownColumnError =
+      response.status === 400 &&
+      (message.includes("PGRST204") || message.includes("schema cache"));
+
+    if (!hasUnknownColumnError) {
+      throw new Error(`Supabase insert failed: ${response.status} ${message}`);
+    }
+
+    // Fallback insert for projects where the leads table has fewer columns.
+    const minimalInsertPayload = {
       email: payload.email,
       share_url: shareUrl,
       audit_token: payload.auditToken ?? null,
       company_name: payload.result?.companyName ?? null,
       verdict: payload.result?.verdict ?? null,
-      health_score: payload.result?.healthScore ?? null,
       monthly_savings: payload.result?.monthlySavings ?? null,
       annual_savings: payload.result?.annualSavings ?? null,
-      summary: payload.result?.summary ?? null,
-      use_case: payload.result?.useCase ?? null,
       team_size: payload.result?.teamSize ?? null,
-      current_monthly_spend: payload.result?.currentMonthlySpend ?? null,
-      recommended_monthly_spend: payload.result?.recommendedMonthlySpend ?? null,
       created_at: new Date().toISOString(),
-    }),
-  });
+    };
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw new Error(`Supabase insert failed: ${response.status} ${message}`);
+    const retryResponse = await fetch(endpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(minimalInsertPayload),
+    });
+
+    if (!retryResponse.ok) {
+      const retryMessage = await retryResponse.text();
+      throw new Error(`Supabase insert failed: ${retryResponse.status} ${retryMessage}`);
+    }
+
+    return { storedInSupabase: true, supabaseConfigured: true, warning: "Saved with minimal lead schema." };
   }
 
   return { storedInSupabase: true, supabaseConfigured: true };
