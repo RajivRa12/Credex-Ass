@@ -24,11 +24,14 @@ function isValidEmail(email: string) {
 }
 
 async function storeInSupabase(payload: LeadRequestBody, shareUrl: string) {
-  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseServiceRoleKey) {
-    return { storedInSupabase: false, warning: "Supabase credentials are not configured yet." };
+    return {
+      storedInSupabase: false,
+      warning: "Supabase credentials are not configured yet. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.",
+    };
   }
 
   const response = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/audit_leads`, {

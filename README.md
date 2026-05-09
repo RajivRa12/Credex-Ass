@@ -41,11 +41,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```bash
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 RESEND_API_KEY=your_resend_api_key
 RESEND_FROM_EMAIL=noreply@spendscope.app
 ANTHROPIC_API_KEY=your_anthropic_api_key  # for LLM summary
 ```
+
+For Vercel, add the same values under Project Settings > Environment Variables. Keep `SUPABASE_SERVICE_ROLE_KEY` server-only; it should not be exposed as a public variable.
 
 ## Deploy
 
