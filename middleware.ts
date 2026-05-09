@@ -1,18 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/utils/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({
+export function middleware(request: NextRequest) {
+  // Passthrough middleware for Vercel compatibility
+  // Authentication is optional for MVP; full Supabase integration deferred
+  return NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
-
-  const supabase = createClient(request, response);
-
-  await supabase.auth.getUser();
-
-  return response;
 }
 
 export const config = {
