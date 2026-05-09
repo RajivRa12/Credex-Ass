@@ -30,6 +30,7 @@ async function storeInSupabase(payload: LeadRequestBody, shareUrl: string) {
   if (!supabaseUrl || !supabaseServiceRoleKey) {
     return {
       storedInSupabase: false,
+      supabaseConfigured: false,
       warning: "Supabase credentials are not configured yet. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.",
     };
   }
@@ -66,7 +67,7 @@ async function storeInSupabase(payload: LeadRequestBody, shareUrl: string) {
     throw new Error(`Supabase insert failed: ${response.status} ${message}`);
   }
 
-  return { storedInSupabase: true };
+  return { storedInSupabase: true, supabaseConfigured: true };
 }
 
 async function sendConfirmationEmail(payload: LeadRequestBody, shareUrl: string) {
@@ -74,7 +75,7 @@ async function sendConfirmationEmail(payload: LeadRequestBody, shareUrl: string)
   const resendFromEmail = process.env.RESEND_FROM_EMAIL;
 
   if (!resendApiKey || !resendFromEmail) {
-    return { confirmationSent: false, warning: "Resend credentials are not configured yet." };
+    return { confirmationSent: false, resendConfigured: false, warning: "Resend credentials are not configured yet." };
   }
 
   const companyName = payload.result?.companyName ?? "your team";
@@ -106,7 +107,7 @@ async function sendConfirmationEmail(payload: LeadRequestBody, shareUrl: string)
     throw new Error(`Resend email failed: ${response.status} ${message}`);
   }
 
-  return { confirmationSent: true };
+  return { confirmationSent: true, resendConfigured: true };
 }
 
 export async function POST(request: Request) {
