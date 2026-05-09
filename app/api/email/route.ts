@@ -47,7 +47,6 @@ async function storeInSupabase(payload: LeadRequestBody, shareUrl: string) {
       email: payload.email,
       share_url: shareUrl,
       audit_token: payload.auditToken ?? null,
-      audit_id: payload.result?.id ?? null,
       company_name: payload.result?.companyName ?? null,
       verdict: payload.result?.verdict ?? null,
       health_score: payload.result?.healthScore ?? null,
