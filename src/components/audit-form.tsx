@@ -122,7 +122,7 @@ export function AuditForm() {
     event.preventDefault();
     const result = runAudit(form);
     const token = encodeToken(result);
-    router.push(`/results?token=${encodeURIComponent(token)}`);
+    router.push(`/results/${encodeURIComponent(token)}`);
   }
 
   return (
