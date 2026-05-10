@@ -1,5 +1,7 @@
 # PRICING_DATA
 
+Your sources for every tool’s pricing. Every number in the audit engine traces back to an official vendor pricing page URL, verified during submission week.
+
 All pricing verified from official vendor sources as of 2026-05-07.
 
 ## Cursor

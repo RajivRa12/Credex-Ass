@@ -1,5 +1,7 @@
 # PROMPTS
 
+The full LLM prompts used in the tool, plus why they were written this way and what did not work.
+
 ## Deterministic Summary Prompt (Current Implementation)
 
 The MVP uses templated summaries rather than live LLM calls. This prompt describes the logic:

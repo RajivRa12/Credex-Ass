@@ -2,49 +2,50 @@
 
 ## Hero headline (≤10 words)
 
-**Audit your AI spend. Cut waste. Save money.**
+**Audit your AI spend in minutes.**
 
 ## Subheadline (≤25 words)
 
-**Know if you're overspending on tools. Get instant savings recommendations. Share results with your team.**
+**See where you’re overspending, what to downgrade, and how much you could save before you ever hand over your email.**
 
 ## Primary CTA copy
 
-- Button: **Run Your Audit** (primary action on landing)
-- Secondary: **See how much you could save** (link to form)
-- Post-audit: **Unlock this result** or **Share with your team** (after email capture)
+- Primary button: **Run your audit**
+- Secondary link: **See how it works**
+- Post-audit CTA: **Unlock your report**
+- High-savings CTA: **Book a Credex consultation**
 
 ## Social proof block
 
-**[Mocked — indicate as such]**
+**Mocked social proof**
 
-"Used by founders and teams at 50+ startups"
+"Used by founders and engineering teams at 50+ startups"
 
-*Logos (placeholder): Y Combinator companies, early-stage SaaS, indie hacker badges*
+Placeholder logos: Y Combinator alumni, early-stage SaaS, indie hacker communities
 
-Individual quotes:
-- "We didn't realize we had 3 overlapping tools. Saved $12k/year." — Sarah, founder
-- "Credex's recommendations came directly from this audit." — Jason, CTO
-- "First time I've seen tool spend broken down this clearly." — Maya, finance
+Sample quotes:
+- "We found three overlapping subscriptions in one pass and cut spend the same day." — Sarah, founder
+- "The savings breakdown made it easy to justify the change to finance." — Jason, CTO
+- "Finally, a tool that shows its math instead of just making a sales pitch." — Maya, finance lead
 
 ## FAQ
 
 **1. Do I need to connect any accounts?**
 
-No. Just tell us what tools you use, your current plan, and monthly spend. We never ask for passwords or account access.
+No. You just enter the tools you pay for, your plan, spend, team size, and use case. We do not request passwords or API access.
 
 **2. How accurate are the savings numbers?**
 
-Very. Our recommendations are rule-based and backed by official vendor pricing (cited in our methodology). We don't invent savings — if you're already optimized, we'll tell you.
+They are rule-based and tied to official vendor pricing pages. If a better option does not exist, we say that instead of inventing savings.
 
-**3. Will you email me constantly?**
+**3. When do you ask for my email?**
 
-No. One confirmation email after your audit + optionally updates about new tool optimizations. We respect your inbox.
+Only after you see the audit results. The report comes first; email capture is optional and comes second.
 
-**4. Can I share this result with my team?**
+**4. Can I share the result with my team?**
 
-Absolutely. After you run an audit, you'll get a shareable link with a clean, branded result page. Great for internal budget reviews.
+Yes. Every audit gets a shareable public URL with clean Open Graph previews, so it is easy to send in Slack, email, or a board update.
 
-**5. Who's behind SpendScope?**
+**5. Who is this for?**
 
-Built by the Credex team. Credex negotiates discounts on AI infrastructure credits — this tool helps you find where you can use those credits.
+It is for founders, engineering managers, and operators who want a fast, credible read on AI tool spend before renewing another monthly bill.

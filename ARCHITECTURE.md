@@ -2,72 +2,106 @@
 
 ## System Overview
 
-SpendScope AI is a Next.js 15 frontend-centric MVP that audits AI tool spend and generates leads for Credex. The architecture prioritizes simplicity (no user database), auditability (deterministic logic), and shareability (URL-encoded results).
+SpendScope AI is a Next.js 15 App Router MVP that turns a user's current AI tooling stack into a defensible spend audit, then converts high-savings cases into Credex leads. The architecture favors deterministic audit math, explicit pricing sources, and shareable results over heavy backend state.
 
+## What You're Building
+
+A free web app that does this end-to-end:
+1. A cold visitor lands on the page from a tweet, a blog post, or Hacker News.
+2. They input what AI tools they pay for, what plan, monthly spend, team size, and primary use case.
+3. They get an instant on-screen audit: where they’re overspending, what to switch to or downgrade, and total potential monthly + annual savings.
+4. They get an option to capture the report with an email gate and, for high-savings cases, book a Credex consultation.
+5. The result is shareable via a unique public URL with proper Open Graph previews.
+
+No login is required to use the tool. Email is captured after value is shown, never before.
+
+## MVP Features
+
+### 1. Spend input form
+
+Support at minimum these tools as of submission week:
+- Cursor (Hobby / Pro / Business / Enterprise)
+- GitHub Copilot (Individual / Business / Enterprise)
+- Claude (Free / Pro / Max / Team / Enterprise / API direct)
+- ChatGPT (Plus / Team / Enterprise / API direct)
+- Anthropic API direct
+- OpenAI API direct
+- Gemini (Pro / Ultra / API)
+- Windsurf or v0 — one additional tool of choice
+
+For each tool, capture plan, current monthly spend, and number of seats. Also capture team size and primary use case (coding / writing / data / research / mixed). Draft state persists across page reloads so cold visitors can return without losing input.
+
+```mermaid
+flowchart TD
+  A[Landing page] --> B[Audit form]
+  B --> C[Audit engine]
+  C --> D[Results page]
+  D --> E[Email capture]
+  D --> F[Public share URL]
+  E --> G[Supabase lead storage]
+  E --> H[Resend confirmation email]
+  D --> I[Anthropic summary fallback]
+  F --> J[Open Graph preview]
+  D --> K[Credex CTA when savings > $500/mo]
+  D --> L[Honest 'you're spending well' state when savings < $100/mo]
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    SPENDSCOPE AI ARCHITECTURE                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  LANDING PAGE (app/page.tsx)                                     │
-│  ├─ Hero + Features + FAQ                                        │
-│  └─ CTA → /audit                                                 │
-│                                                                   │
-│  AUDIT FORM (app/audit/page.tsx)                                 │
-│  ├─ Tool selection (8+ tools)                                    │
-│  ├─ Plan selection per tool                                      │
-│  ├─ Spend input (monthly)                                        │
-│  ├─ Team size + use case                                         │
-│  └─ localStorage persistence                                     │
-│       │                                                           │
-│       ▼                                                           │
-│                                                                   │
-│  AUDIT ENGINE (lib/audit-engine.ts)                              │
-│  ├─ Rule-based logic (no AI; deterministic)                      │
-│  ├─ Check plan fit for team size                                 │
-│  ├─ Detect overlapping tools                                     │
-│  ├─ Suggest cheaper alternatives                                 │
-│  ├─ Calculate per-tool + aggregate savings                       │
-│  ├─ Assign health score + verdict                                │
-│  └─ Generate one-line reasoning per recommendation               │
-│       │                                                           │
-│       ▼                                                           │
-│                                                                   │
-│  RESULTS PAGE (app/results/[id]/page.tsx)                        │
-│  ├─ Decode URL token → render audit result                       │
-│  ├─ Hero: total monthly + annual savings                         │
-│  ├─ Per-tool breakdown (current → recommended)                   │
-│  ├─ Email capture gate (reveals share link after submit)         │
-│  └─ AI-generated summary (templated or LLM)                      │
-│       │                                                           │
-│       ├─→ Supabase: store lead + audit metadata                  │
-│       ├─→ Resend: send confirmation email                        │
-│       └─→ Return shareable public URL                            │
-│                                                                   │
-│  PUBLIC RESULT (app/results/[id]/page.tsx — no email gate)       │
-│  ├─ Same layout as private version                               │
-│  ├─ Open Graph tags for link sharing                             │
-│  └─ CTA: "Run your own audit" (referral loop)                    │
-│                                                                   │
-└─────────────────────────────────────────────────────────────────┘
-```
+
+## MVP Requirement Coverage
+
+### Audit engine
+
+The audit engine is deterministic and rule-based. For each tool row, it evaluates:
+- Whether the current plan fits the team size and use case.
+- Whether a cheaper plan from the same vendor would still satisfy the user.
+- Whether a materially cheaper alternative with similar capability exists for the stated use case.
+- Whether the user is effectively paying retail for functionality that could be sourced through AI credits or a lower-tier plan.
+
+The logic stays defensible by tying every recommendation to a pricing source, a team-size assumption, and a one-sentence explanation. The audit engine does not try to "guess" preferences with AI; it uses current pricing data and explicit heuristics that a finance reviewer can follow.
+
+### Results page
+
+The results page is the product's shareable artifact and must be visually strong enough to screen-shot. It shows:
+- A large hero with total monthly savings and total annual savings.
+- A per-tool breakdown of current spend, recommended action, savings, and one-line rationale.
+- A Credex-forward CTA when savings are above $500/month.
+- An honest "You're spending well" message for already-optimized or low-savings audits.
+- A lead capture prompt that still offers future optimization notifications when immediate savings are small.
+
+The public version keeps the same layout but strips identifying details so the result can be safely shared externally.
+
+### AI-generated personalized summary
+
+The summary paragraph is the only part that uses an LLM. Anthropic is preferred, but the system must gracefully fall back to a templated summary if the API fails or is unavailable. The prompt lives in [PROMPTS.md](./PROMPTS.md), and the fallback ensures the audit result is never blocked by a third-party dependency.
+
+### Lead capture + storage
+
+Email capture happens only after the user sees value. Optional fields include company name, role, and team size. Leads are stored in Supabase, and a transactional email is sent through Resend to confirm the audit and mention Credex follow-up for high-savings cases. Abuse protection is intentionally lightweight for MVP: honeypot first, with rate limiting and hCaptcha as the next layer if traffic increases.
+
+### Shareable result URL
+
+Every audit produces a unique public URL. Identifying details such as company name and email are stripped from the public version, while the tools, pricing assumptions, savings numbers, and summary remain visible. Open Graph metadata is generated so the result renders cleanly on Twitter, LinkedIn, and messaging apps.
+
+### Bonus features
+
+The bonus work stays optional until the MVP is fully working:
+- PDF export of the full report.
+- Embeddable widget via a script tag.
+- Benchmark mode showing per-developer spend versus peers.
+- Referral codes for shared-audit growth loops.
+- A short launch-thread or blog post draft for go-to-market use.
 
 ## Data Flow
 
-1. **User lands on homepage** → sees hero, features, CTA
-2. **Clicks "Run Audit"** → navigates to `/audit`
-3. **Fills form** → submitted to audit engine
-4. **Audit engine runs** → deterministic rules (no backend call needed)
-5. **Results generated** → JSON serialized + base64url encoded into URL token
-6. **Redirects to `/results/[token]`** → URL-encoded result decoded and displayed
-7. **User sees results** → Hero savings, per-tool breakdown, honest verdict
-8. **Email capture form** → email + optional company/role/team size
-9. **Submits email** → POST to `/api/email`
-   - Supabase stores lead + audit metadata
-   - Resend sends transactional confirmation email
-   - Returns shareable public URL (`/results/[token]?public=true`)
-10. **Share via public URL** → Open Graph preview, visitor lands on results without email gate
-11. **Visitor runs own audit** → loop closes (referral)
+1. **User lands on homepage** and clicks through to the audit form.
+2. **User enters tools, plans, spend, team size, and use case** and the draft persists locally across reloads.
+3. **Form submission sends normalized inputs to the audit engine**.
+4. **Audit engine evaluates each tool** using plan-fit, cheaper-plan, overlap, and credits-versus-retail checks.
+5. **Recommendations are assembled** into per-tool actions plus monthly and annual savings totals.
+6. **The result is serialized into a token** so the private result page can be opened immediately without login.
+7. **The results page renders** the hero savings summary, per-tool breakdown, and AI-generated summary.
+8. **If the user submits email**, the lead is stored in Supabase and a confirmation email is sent through Resend.
+9. **A public result URL is returned** with PII removed, Open Graph tags enabled, and the Credex CTA shown conditionally based on savings.
+10. **A visitor who opens the public URL** sees the same audit insight and can start their own audit, closing the sharing loop.
 
 ## Stack Justification
 
@@ -77,9 +111,9 @@ SpendScope AI is a Next.js 15 frontend-centric MVP that audits AI tool spend and
 | **Language** | TypeScript (strict) | Type safety for audit logic; refactorability; team clarity |
 | **Styling** | Tailwind CSS v4 + custom theme | Rapid UI build; custom dark palette for premium feel; CSS variables for consistency |
 | **State Management** | Zustand + localStorage | Minimal bundle; offline-first form persistence; no Redux boilerplate |
-| **Lead Storage** | Supabase (optional for MVP) | Managed PostgreSQL; built-in auth if needed; free tier sufficient for MVP |
-| **Email** | Resend (optional for MVP) | Transactional email SaaS; simple API; reliable delivery; free tier for testing |
-| **LLM Summary** | Anthropic API (stubbed) | Free credits available; good summarization; fallback to templated summary if API fails |
+| **Lead Storage** | Supabase | Managed PostgreSQL; simple server-side writes; easy to scale without introducing auth complexity into the audit flow |
+| **Email** | Resend | Simple transactional API; reliable for confirmation emails and follow-up notices |
+| **LLM Summary** | Anthropic API + fallback | Preferred for natural-language summaries; isolated from the audit math so the core result remains deterministic |
 | **Deployment** | Vercel | Native Next.js optimization; auto-scaling; edge functions for future |
 
 ## Why Not...
@@ -93,25 +127,24 @@ SpendScope AI is a Next.js 15 frontend-centric MVP that audits AI tool spend and
 ## Scaling to 10k audits/day
 
 **Current bottlenecks:**
-1. Vercel serverless max execution: 60 seconds (plenty for audit engine)
-2. Supabase connection pooling: shared resource; may need upgrade at 1k leads/day
-3. Resend email throughput: good to 100k/day; not a blocker
-4. Static asset CDN: Vercel handles this; not a blocker
+1. The audit engine is CPU-light, but pricing lookups and result serialization should stay fast.
+2. Supabase writes and email sends become the first real backend pressure points.
+3. The share-page and social preview path must remain stateless so traffic spikes do not depend on a database read.
 
 **Changes for 10k audits/day:**
-1. **Supabase upgrade:** Move to dedicated connection pool tier (~$100/month)
-2. **Caching layer:** Add Redis for frequently-accessed tool pricing (sub-millisecond lookups)
-3. **Async email queue:** If volume > 1k leads/day, use Bull/RabbitMQ to decouple email sends from request critical path
-4. **Database indices:** Index `audit_leads` table on (created_at, health_score) for analytics queries
-5. **API rate limiting:** Add per-IP rate limiting (honeypot + hCaptcha) to prevent bot abuse
-6. **Audit engine optimization:** Pre-compute tool overlaps in a lookup table; currently O(n²), can be O(n)
+1. **Cache pricing data** in memory or Redis so lookups stay sub-millisecond.
+2. **Queue email sending** so result generation does not wait on an external mail API.
+3. **Add stronger rate limiting** with honeypots plus hCaptcha if bot traffic rises.
+4. **Index lead tables** on created_at, verdict, and savings to keep reporting cheap.
+5. **Split the summary generation path** so LLM failures never affect the deterministic audit result.
+6. **Precompute comparison rules** for overlaps and tool families so recommendation checks remain effectively O(n) for the small stack sizes this product expects.
 
 **Estimated infrastructure cost at 10k audits/day:**
-- Vercel: $100/month (Pro + Edge Functions)
-- Supabase: $500/month (dedicated pool)
-- Resend: $100/month (high volume tier)
-- Redis: $50/month (small instance)
-- **Total: ~$750/month** for 10k audits/day × 30 days = 300k audits/month = $0.0025 per audit (including ops time)
+- Vercel: $100/month (app + serverless traffic)
+- Supabase: $500/month (writes + pooled connections)
+- Resend: $100/month (transactional email volume)
+- Redis or cache layer: $50/month
+- **Total: roughly $750/month** at 300k audits/month, before human ops time.
 
 ## Database Schema (if scaling past MVP)
 

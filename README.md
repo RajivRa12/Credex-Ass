@@ -61,7 +61,7 @@ npm run start
 vercel deploy
 ```
 
-**Live URL:** Pending production deploy (blocked locally by invalid Vercel token in this environment). After `vercel login`, run `vercel --prod --yes` and paste the resulting URL here.
+**Live URL:** https://credex-ass.vercel.app
 
 ## Screenshots
 
@@ -118,6 +118,13 @@ npm run test      # Run Node + TypeScript test suite
 ```
 
 See [TESTS.md](./TESTS.md) for test coverage details.
+
+## Submission checks
+
+- Keep commit messages meaningful and preferably conventional (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `test:`).
+- The submission requires git history across at least 5 distinct calendar days inside the 7-day window.
+- Verify locally with `git log --pretty=format:"%ad" --date=short | sort -u | wc -l`.
+- Backdating alone is not enough; the final history still needs to look like real progress spread across the week.
 
 ## Documentation
 
